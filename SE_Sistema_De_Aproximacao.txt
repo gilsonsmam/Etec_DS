@@ -1,0 +1,53 @@
+// C++ code
+//
+
+int SonarTrigger = 7;
+int SonarEcho = 6;
+
+int distancia = 0;
+int tempo = 0;
+
+int LED  = 4; 
+int LED2 = 5;
+int LED3 = 3; 
+
+void setup()
+{
+  pinMode(SonarTrigger, OUTPUT);
+  pinMode(SonarEcho, INPUT);
+  Serial.begin(9600);
+  
+}
+
+void loop()
+{
+  digitalWrite(SonarTrigger, LOW);// Estabiliza sensor (Força ele a ficar em modo baixo)
+  delayMicroseconds(2); 
+  
+  digitalWrite(SonarTrigger, HIGH); //Envia um pulso para ativar
+  delayMicroseconds(10);
+  digitalWrite(SonarTrigger, LOW);
+  
+  tempo = pulseIn(SonarEcho, HIGH); //Função que recebe um pulso
+  distancia = tempo/58.2; // Distancia = tempo * velocidade do som
+  
+  if(distancia > 100 && distancia < 200){
+    digitalWrite(3, HIGH);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+  }else if(distancia > 200){
+    digitalWrite(3, LOW);
+    digitalWrite(4, LOW);
+    digitalWrite(5, HIGH);
+  }else{
+    digitalWrite(3, LOW);
+    digitalWrite(4, HIGH);
+    digitalWrite(5, LOW);
+  }
+  
+  Serial.print("Distancia medida: ");
+  Serial.print(distancia);
+  Serial.println("cm");
+  
+  delay(1000); //Mede a cada 1 segundo
+}
